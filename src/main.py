@@ -1,27 +1,32 @@
 import sys
 import os
+import re
+import importlib
 
-cur_path = os.path.dirname(os.path.realpath(__file__))
+CUR_PATH = os.path.dirname(os.path.realpath(__file__))
+SOLUTION_DIRECTORY = "solution"
+INPUT_FILE_DIRECTORY = "in"
+OUTPUT_FILE_DIRECTORY = "out"
+
+import solution
+
+def get_files(dir):
+    return [os.path.relpath(os.path.join(dir, name), dir) for name in os.listdir(dir) if os.path.isfile(os.path.join(dir, name))]
+
+def get_modules():
+    modules = [re.sub(r'[\\/]', '.', x)[:-3] for x in get_files(SOLUTION_DIRECTORY)]
+    return modules
+
+in_files = get_files(INPUT_FILE_DIRECTORY)
+
+for module in get_modules():
+    module_path = SOLUTION_DIRECTORY + "." + module
+    importlib.import_module(module_path)
+
+    for in_file in in_files:
+        if in_file.startswith(module):
+            handle = open(os.path.join(INPUT_FILE_DIRECTORY, in_file))
+            out_handle = open(os.path.join(OUTPUT_FILE_DIRECTORY, re.sub('.in', '.txt', in_file)), 'w')
+            eval("{}.solve({}, {})".format(module_path, 'handle', 'out_handle'))
 
 
-def get_subdirectories(dir):
-    return [os.path.join(dir, name) for name in os.listdir(dir) if os.path.isdir(os.path.join(dir, name))]
-
-def get_round_dirs():
-    year_dirs = get_subdirectories(cur_path)
-
-    round_dirs = []
-    for year_dir in year_dirs:
-        round_dirs += get_subdirectories(year_dir)
-
-    return round_dirs
-
-def test_round(round_dir):
-    print(round_dir)
-    in_files = os.listdir(os.path.join(round_dir, "in"))
-    for (in_file in in_files):
-        source_file = os.path.join(round_dir, "solution", in_file[0] + ".py")
-        os.system("python3 {}".format(source_file))
-
-for round in get_round_dirs():
-    test_round(round)
