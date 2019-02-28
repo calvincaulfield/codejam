@@ -27,6 +27,9 @@ for module in get_modules():
         if in_file.startswith(module):
             handle = open(os.path.join(INPUT_FILE_DIRECTORY, in_file))
             out_handle = open(os.path.join(OUTPUT_FILE_DIRECTORY, re.sub('.in', '.txt', in_file)), 'w')
+            print("{}, {}".format(module, in_file))
             eval("{}.solve({}, {})".format(module_path, 'handle', 'out_handle'))
+            handle.close()
+            out_handle.close()
 
 
