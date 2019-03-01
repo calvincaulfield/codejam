@@ -1,10 +1,10 @@
 
 def solve(input, output):
     def get_int():
-        return int(input.readline())
+        return int(input.readline().strip())
 
     def get_string():
-        return input.readline()
+        return input.readline().strip()
 
     def solve_case(num):
         # All time units are minute
