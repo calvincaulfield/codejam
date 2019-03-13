@@ -45,8 +45,9 @@ for module in get_modules():
             handle = open(os.path.join(INPUT_FILE_DIR, in_file))
             out_file = re.sub('.in', '.txt', in_file)
             out_handle = open(os.path.join(OUTPUT_FILE_DIR, out_file), 'w')
-            #print("{}, {}".format(module, in_file))
+            #print("Now solving {}, {}".format(module, in_file))
             eval("{}.solve({}, {})".format(module_path, 'handle', 'out_handle'))
+            eval("{}.test()".format(module_path))
             handle.close()
             out_handle.close()
 
@@ -56,6 +57,6 @@ for module in get_modules():
             elif not compare_two_files(os.path.join(OUTPUT_FILE_DIR, out_file), os.path.join(ANSWER_FILE_DIR, out_file)):
                     print("Output error:\t\t{}".format(out_file))
             else:
-                print("Correct")
+                print("Correct: {}".format(out_file))
 
 

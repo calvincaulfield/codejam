@@ -38,3 +38,6 @@ def solve(input, output):
     num_cases = get_int()
     for i in range(num_cases):        
         output.write("Case #{}: {}\n".format(i + 1, solve_case()))
+
+def test():
+    pass

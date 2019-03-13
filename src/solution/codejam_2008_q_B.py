@@ -50,3 +50,6 @@ def solve(input, output):
     for i in range(num_cases):        
         x, y = solve_case()
         output.write("Case #{}: {} {}\n".format(i + 1, x, y))
+
+def test():
+    pass
