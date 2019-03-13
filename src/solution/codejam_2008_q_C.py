@@ -1,5 +1,6 @@
 
 import math
+import numpy
 
 def solve(input, output):
     def get_int():
@@ -51,8 +52,8 @@ def solve(input, output):
             wrong_pie_large = get_wrong_pie_area(radius, y)
 
             rectangle = x * (border_y - y)
-            
-            return wrong_pie_large - wrong_pie_small - rectangle)
+
+            return wrong_pie_large - wrong_pie_small - rectangle
 
     def solve_case():
         fly_r, racket_outer_r, racket_thickness, string_r, gap = [float(x) for x in get_string().split(" ")]
@@ -68,11 +69,10 @@ def solve(input, output):
         total_gap_area = 0
         
         # x, y denotes bottom-left corner of gap square
-        for x in range(0, racket_inner_r, unit_square_size):
-            for y in range(0, racket_inner_r, unit_square_size):
+        for x in numpy.arange(0, racket_inner_r, unit_square_size):
+            for y in numpy.arange(0, racket_inner_r, unit_square_size):
+                pass
 
-
-        
         return f"{0.9999:.6f}"
 
     num_cases = get_int()
