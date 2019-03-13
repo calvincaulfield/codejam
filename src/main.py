@@ -53,7 +53,9 @@ for module in get_modules():
             # Compare with already proven answers
             if (out_file not in answer_files):
                 print("Not solved:\t\t{}".format(out_file))
-            else:
-                if not compare_two_files(os.path.join(OUTPUT_FILE_DIR, out_file), os.path.join(ANSWER_FILE_DIR, out_file)):
+            elif not compare_two_files(os.path.join(OUTPUT_FILE_DIR, out_file), os.path.join(ANSWER_FILE_DIR, out_file)):
                     print("Output error:\t\t{}".format(out_file))
+            else:
+                print("Correct")
+
 

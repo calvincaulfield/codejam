@@ -6,7 +6,7 @@ def solve(input, output):
     def get_string():
         return input.readline().strip()
 
-    def solve_case(num):
+    def solve_case():
         # All time units are minute
         turn_around_time = get_int()
         num_a_to_b, num_b_to_a = [int(x) for x in get_string().split(" ")]
@@ -43,10 +43,10 @@ def solve(input, output):
         process_timetable(num_a_to_b, a_departures, b_arrivals)
         process_timetable(num_b_to_a, b_departures, a_arrivals)
 
+        return (get_max_debt(a_departures, a_arrivals), get_max_debt(b_departures, b_arrivals), )
         #print(a_departures, a_arrivals)
 
-        output.write("Case #{}: {} {}\n".format(num, get_max_debt(a_departures, a_arrivals), get_max_debt(b_departures, b_arrivals)))
-
     num_cases = get_int()
-    for i in range(num_cases):
-        solve_case(i + 1)
+    for i in range(num_cases):        
+        x, y = solve_case()
+        output.write("Case #{}: {} {}\n".format(i + 1, x, y))

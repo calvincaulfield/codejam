@@ -6,7 +6,7 @@ def solve(input, output):
     def get_string():
         return input.readline().strip()
 
-    def solve_case(num):
+    def solve_case():
         servers = {}
         num_used_server = 0
         num_servers = get_int()
@@ -33,8 +33,8 @@ def solve(input, output):
                 num_used_server += 1
                 servers[keyword] = True
 
-        output.write("Case #{}: {}\n".format(num, num_server_change))
+        return num_server_change        
 
     num_cases = get_int()
-    for i in range(num_cases):
-        solve_case(i + 1)
+    for i in range(num_cases):        
+        output.write("Case #{}: {}\n".format(i + 1, solve_case()))
