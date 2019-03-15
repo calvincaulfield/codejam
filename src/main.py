@@ -2,6 +2,7 @@ import sys
 import os
 import re
 import importlib
+import solution
 
 CUR_PATH = os.path.dirname(os.path.realpath(__file__))
 SOLUTION_DIRECTORY = "solution"
@@ -9,6 +10,8 @@ INPUT_FILE_DIR = "in"
 OUTPUT_FILE_DIR = "out"
 ANSWER_FILE_DIR = "answer"
 
+IS_TEST = True
+IS_TEST = False
 
 import solution
 
@@ -41,6 +44,9 @@ for module in get_modules():
     importlib.import_module(module_path)
 
     for in_file in in_files:
+        if (IS_TEST and "test" not in in_file):
+            continue
+            
         if in_file.startswith(module):
             handle = open(os.path.join(INPUT_FILE_DIR, in_file))
             out_file = re.sub('.in', '.txt', in_file)
