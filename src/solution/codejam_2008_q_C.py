@@ -1,6 +1,5 @@
 
 import math
-import numpy
 import sys
 
 def square(x):
@@ -91,11 +90,16 @@ def solve(input, output):
         # x, y denotes bottom-left corner of gap square
         first_square_position = string_r + fly_r
 
-        for x in numpy.arange(first_square_position, racket_inner_r, interval):
+        x = first_square_position
+        while x < racket_inner_r:
             right = x + unit_square_size
-            top_y = get_opposite_len(right)
+            if right > racket_inner_r:
+                right = racket_inner_r
+            top_y = get_opposite_len(racket_inner_r, right)
             num_squares = (top_y - fly_r - string_r) // interval
             last_y = interval * num_squares
+
+            x += interval
 
 
             total_gap_area += get_circle_square_intersection(racket_inner_r, x, last_y, unit_square_size)
