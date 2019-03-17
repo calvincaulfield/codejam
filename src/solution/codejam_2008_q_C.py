@@ -16,10 +16,7 @@ def get_wrong_pie_area(radius, x):
     return pie_area - (x * y / 2)
 
 def get_curve_triangle_area(radius, x, y):
-    border_x = get_opposite_len(radius, y)
     border_y = get_opposite_len(radius, x)
-
-    #return (border_y - y) * (border_x - x) / 2
 
     wrong_pie_small = get_wrong_pie_area(radius, border_y)
     wrong_pie_large = get_wrong_pie_area(radius, y)
@@ -37,8 +34,6 @@ def get_circle_square_intersection(radius, x, y, square_size):
 
     #print ("args", radius, x, y, square_size)
 
-    
-
     if (not is_inside(x, y)):
         return 0
     
@@ -55,7 +50,6 @@ def get_circle_square_intersection(radius, x, y, square_size):
             new_x = x
 
         if (is_inside(x + square_size, y)):
-            #print("b")
             new_y = get_opposite_len(radius, x + square_size)
             offset_area += (x + square_size - new_x) * (new_y - y)
         else:
@@ -71,7 +65,8 @@ def solve(input, output):
         return input.readline().strip()
 
     def solve_case():
-        fly_r, racket_outer_r, racket_thickness, string_r, gap = [float(x) for x in get_string().split(" ")]
+        fly_r, racket_outer_r, racket_thickness, string_r, gap = \
+            [float(x) for x in get_string().split(" ")]
         racket_inner_r = racket_outer_r - racket_thickness - fly_r
         
         # Consider only 1/4 of the circle of racket (1st quarter where x >= 0 and y >= 0)
@@ -91,32 +86,43 @@ def solve(input, output):
         first_square_position = string_r + fly_r
 
         x = first_square_position
+
+        fast_mode = True
+        #fast_mode = False
+
         while x < racket_inner_r:
-            right = x + unit_square_size
-            if right > racket_inner_r:
-                right = racket_inner_r
-            top_y = get_opposite_len(racket_inner_r, right)
-            num_squares = (top_y - fly_r - string_r) // interval
-            last_y = interval * num_squares
+            if (fast_mode):
+                right = x + unit_square_size
+                if right > racket_inner_r:
+                    right = racket_inner_r
+
+                top_y = get_opposite_len(racket_inner_r, right)
+                first_top_y = string_r + fly_r + unit_square_size
+                first_bottom_y = string_r + fly_r
+
+                num_squares = (top_y - first_top_y) // interval + 1
+                
+                #print(right, top_y, num_squares)
+                total_gap_area += square(unit_square_size) * num_squares
+                
+                bottom_y = first_bottom_y + interval * num_squares
+                while bottom_y < get_opposite_len(racket_inner_r, x):
+                    total_gap_area += get_circle_square_intersection(
+                        racket_inner_r, x, bottom_y, unit_square_size)
+                    bottom_y += interval
+            else:
+                y = first_square_position
+                while y < racket_inner_r:
+                    total_gap_area += get_circle_square_intersection(
+                        racket_inner_r, x, y, unit_square_size)
+
+                    y += interval
 
             x += interval
 
-
-            total_gap_area += get_circle_square_intersection(racket_inner_r, x, last_y, unit_square_size)
-
         answer = 1 - (total_gap_area / total_area)
-        print("Line", total_area, total_gap_area, answer)
         return answer
 
     num_cases = get_int()
-    for i in range(num_cases):        
-        output.write("Case #{}: {:.12f}\n".format(i + 1, solve_case()))
-
-def test():
-    test_cases = [
-        (1, 0, 0, 0.5),
-        (1, 0.0, 0.0, 0.7),
-        (1, 0.0, 0.0, 1)
-    ]
-    for test_case in test_cases:
-        print(f"Test case: {test_case}, result {get_circle_square_intersection(*test_case)}")
+    for i in range(num_cases):   
+        output.write("Case #{}: {:.6f}\n".format(i + 1, solve_case()))

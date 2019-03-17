@@ -16,8 +16,6 @@ def solve(input, output):
         a_arrivals = []
         b_departures = []
         b_arrivals = []
-        a_min = 0
-        b_min = 0
 
         def process_timetable(num, departure_station, arrival_station):
             for _ in range(num):
@@ -44,12 +42,9 @@ def solve(input, output):
         process_timetable(num_b_to_a, b_departures, a_arrivals)
 
         return (get_max_debt(a_departures, a_arrivals), get_max_debt(b_departures, b_arrivals), )
-        #print(a_departures, a_arrivals)
 
     num_cases = get_int()
     for i in range(num_cases):        
         x, y = solve_case()
         output.write("Case #{}: {} {}\n".format(i + 1, x, y))
 
-def test():
-    pass

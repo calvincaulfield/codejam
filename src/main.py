@@ -13,6 +13,8 @@ ANSWER_FILE_DIR = "answer"
 IS_TEST = True
 IS_TEST = False
 
+
+
 import solution
 
 def get_files(dir):
@@ -51,9 +53,7 @@ for module in get_modules():
             handle = open(os.path.join(INPUT_FILE_DIR, in_file))
             out_file = re.sub('.in', '.txt', in_file)
             out_handle = open(os.path.join(OUTPUT_FILE_DIR, out_file), 'w')
-            #print("Now solving {}, {}".format(module, in_file))
             eval("{}.solve({}, {})".format(module_path, 'handle', 'out_handle'))
-            eval("{}.test()".format(module_path))
             handle.close()
             out_handle.close()
 
