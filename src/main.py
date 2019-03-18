@@ -25,8 +25,6 @@ def get_python_file_names(dir):
 def get_module_from_python_file_name(path):
     return path.replace(os.path.sep, '.')
 
-#print(get_files(SOLUTION_DIRECTORY))
-
 def compare_two_files(file1, file2):
     f1 = open(file1)
     f2 = open(file2)
@@ -52,11 +50,10 @@ for python_file in python_files:
     for in_file in in_files:
         if (IS_TEST and "test" not in in_file):
             continue
-        #print(in_file)
-        #print(python_file)
+
         if in_file.startswith(python_file):
             handle = open(os.path.join(INPUT_FILE_DIR, in_file))
-            out_file = in_file.replace('.in', '.txt')
+            out_file = in_file.replace('.in', '.out')
             out_handle = open(os.path.join(OUTPUT_FILE_DIR, out_file), 'w')
             eval("{}.solve({}, {})".format(module, 'handle', 'out_handle'))
             handle.close()
