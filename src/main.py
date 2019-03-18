@@ -4,7 +4,6 @@ import re
 import importlib
 import solution
 
-CUR_PATH = os.path.dirname(os.path.realpath(__file__))
 SOLUTION_DIRECTORY = "solution"
 INPUT_FILE_DIR = "in"
 OUTPUT_FILE_DIR = "out"
@@ -13,16 +12,20 @@ ANSWER_FILE_DIR = "answer"
 IS_TEST = True
 IS_TEST = False
 
-
-
-import solution
-
 def get_files(dir):
-    return [os.path.relpath(os.path.join(dir, name), dir) for name in os.listdir(dir) if os.path.isfile(os.path.join(dir, name))]
+    result = []
+    for cur, _, files in os.walk(dir):
+        for file in files:
+            result.append(os.path.relpath(os.path.join(cur, file), dir))
+    return result
 
-def get_modules():
-    modules = [re.sub(r'[\\/]', '.', x)[:-3] for x in get_files(SOLUTION_DIRECTORY)]
-    return modules
+def get_python_file_names(dir):
+    return [python_file[:-3] for python_file in get_files(dir) if python_file.endswith('.py')]
+
+def get_module_from_python_file_name(path):
+    return path.replace(os.path.sep, '.')
+
+#print(get_files(SOLUTION_DIRECTORY))
 
 def compare_two_files(file1, file2):
     f1 = open(file1)
@@ -37,23 +40,25 @@ def compare_two_files(file1, file2):
             break
     return True
 
+python_files = get_python_file_names(SOLUTION_DIRECTORY)
 in_files = get_files(INPUT_FILE_DIR)
 answer_files = get_files(ANSWER_FILE_DIR)
 
 # Solve all problems and check output
-for module in get_modules():
-    module_path = SOLUTION_DIRECTORY + "." + module
-    importlib.import_module(module_path)
+for python_file in python_files:
+    module = SOLUTION_DIRECTORY + "." + get_module_from_python_file_name(python_file)
+    importlib.import_module(module)
 
     for in_file in in_files:
         if (IS_TEST and "test" not in in_file):
             continue
-            
-        if in_file.startswith(module):
+        #print(in_file)
+        #print(python_file)
+        if in_file.startswith(python_file):
             handle = open(os.path.join(INPUT_FILE_DIR, in_file))
-            out_file = re.sub('.in', '.txt', in_file)
+            out_file = in_file.replace('.in', '.txt')
             out_handle = open(os.path.join(OUTPUT_FILE_DIR, out_file), 'w')
-            eval("{}.solve({}, {})".format(module_path, 'handle', 'out_handle'))
+            eval("{}.solve({}, {})".format(module, 'handle', 'out_handle'))
             handle.close()
             out_handle.close()
 
