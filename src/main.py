@@ -10,7 +10,7 @@ OUTPUT_FILE_DIR = "out"
 ANSWER_FILE_DIR = "answer"
 
 IS_TEST = True
-IS_TEST = False
+#IS_TEST = False
 
 def get_files(dir):
     result = []
