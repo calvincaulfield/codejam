@@ -9,8 +9,9 @@ INPUT_FILE_DIR = "in"
 OUTPUT_FILE_DIR = "out"
 ANSWER_FILE_DIR = "answer"
 
-IS_TEST = True
-#IS_TEST = False
+
+# 0: full, 1: small, 2: test
+TEST_MODE = 1
 
 def get_files(dir):
     result = []
@@ -48,7 +49,9 @@ for python_file in python_files:
     importlib.import_module(module)
 
     for in_file in in_files:
-        if (IS_TEST and "test" not in in_file):
+        if (TEST_MODE == 1 and "large" in in_file):
+            continue
+        if (TEST_MODE == 2 and "test" not in in_file):
             continue
 
         if in_file.startswith(python_file):
