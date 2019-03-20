@@ -11,7 +11,7 @@ ANSWER_FILE_DIR = "answer"
 
 
 # 0: full, 1: small, 2: test
-TEST_MODE = 1
+TEST_MODE = 0
 
 def get_files(dir):
     result = []

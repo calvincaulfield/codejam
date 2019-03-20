@@ -44,8 +44,7 @@ def solve(input, output):
                 return record[number_string]
 
             if (len(number_string) == 1):
-                answer = list_for_number(int(number_string))
-                
+                answer = list_for_number(int(number_string))                
             else:
                 total = get_empty_list()
 
@@ -61,10 +60,10 @@ def solve(input, output):
                 # No operator at all
                 add_list(total, list_for_number(int(number_string)))
                 answer = total
+
             record[number_string] = answer
             return answer
 
-        
         result = get_freq_mode_list(line)
         num_ugly_nums = 0
         for i in range(mode):
