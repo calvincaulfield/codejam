@@ -1,4 +1,3 @@
-
 import math
 import sys
 
@@ -57,12 +56,12 @@ def get_circle_square_intersection(radius, x, y, square_size):
 
         return offset_area + get_curve_triangle_area(radius, new_x, new_y)
 
-def solve(input, output):
+def solve():
     def get_int():
-        return int(input.readline().strip())
+        return int(sys.stdin.readline().strip())
 
     def get_string():
-        return input.readline().strip()
+        return sys.stdin.readline().strip()
 
     def solve_case():
         fly_r, racket_outer_r, racket_thickness, string_r, gap = \
@@ -125,4 +124,6 @@ def solve(input, output):
 
     num_cases = get_int()
     for i in range(num_cases):   
-        output.write("Case #{}: {:.6f}\n".format(i + 1, solve_case()))
+        sys.stdout.write("Case #{}: {:.6f}\n".format(i + 1, solve_case()))
+
+solve()

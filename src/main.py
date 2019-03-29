@@ -1,30 +1,25 @@
 import sys
 import os
 import re
-import importlib
-import solution
-
-SOLUTION_DIRECTORY = "solution"
-INPUT_FILE_DIR = "in"
-OUTPUT_FILE_DIR = "out"
-ANSWER_FILE_DIR = "answer"
-
+import subprocess
 
 # 0: full, 1: small, 2: test
 TEST_MODE = 0
 
-def get_files(dir):
+def get_files_with_extension(dir, extension):
     result = []
     for cur, _, files in os.walk(dir):
         for file in files:
-            result.append(os.path.relpath(os.path.join(cur, file), dir))
+            if (file.endswith(f".{extension}")):
+                result.append(os.path.join(cur, file))
     return result
 
-def get_python_file_names(dir):
-    return [python_file[:-3] for python_file in get_files(dir) if python_file.endswith('.py')]
+def change_extension(path, extension):
+    return ".".join(path.split(".")[:-1]) + "." + extension
 
-def get_module_from_python_file_name(path):
-    return path.replace(os.path.sep, '.')
+def get_src_files():
+    return [x for x in get_files_with_extension('.', 'py') if 'main' not in x]
+
 
 def compare_two_files(file1, file2):
     f1 = open(file1)
@@ -39,35 +34,34 @@ def compare_two_files(file1, file2):
             break
     return True
 
-python_files = get_python_file_names(SOLUTION_DIRECTORY)
-in_files = get_files(INPUT_FILE_DIR)
-answer_files = get_files(ANSWER_FILE_DIR)
-
 # Solve all problems and check output
-for python_file in python_files:
-    module = SOLUTION_DIRECTORY + "." + get_module_from_python_file_name(python_file)
-    importlib.import_module(module)
+for python_file in get_src_files():
+    dir = os.path.dirname(python_file)
+    problem_number = os.path.split(python_file)[1].split('.')[0]
 
+    in_files = [x for x in get_files_with_extension(dir, 'in') if x.startswith(os.path.join(dir, "data", problem_number))]
+    #print(in_files)
+    answer_files = get_files_with_extension(dir, 'answer')
+    
     for in_file in in_files:
         if (TEST_MODE == 1 and "large" in in_file):
             continue
         if (TEST_MODE == 2 and "test" not in in_file):
             continue
 
-        if in_file.startswith(python_file):
-            handle = open(os.path.join(INPUT_FILE_DIR, in_file))
-            out_file = in_file.replace('.in', '.out')
-            out_handle = open(os.path.join(OUTPUT_FILE_DIR, out_file), 'w')
-            eval("{}.solve({}, {})".format(module, 'handle', 'out_handle'))
-            handle.close()
-            out_handle.close()
+        out_file = change_extension(in_file, 'out')
+        answer_file_to_be = change_extension(in_file, 'answer')
+        os.system(f"python {python_file} < {in_file} > {out_file}")
+        return_code = subprocess.run(["python", python_file], stdin=open(in_file), stdout=open(out_file, 'w')).returncode
+        if (return_code != 0):
+            sys.exit(f"Runtime error {in_file}")
 
-            # Compare with already proven answers
-            if (out_file not in answer_files):
-                print("Not solved:\t\t{}".format(out_file))
-            elif not compare_two_files(os.path.join(OUTPUT_FILE_DIR, out_file), os.path.join(ANSWER_FILE_DIR, out_file)):
-                    print("Output error:\t\t{}".format(out_file))
-            else:
-                print("Correct: {}".format(out_file))
+        # Compare with already proven answers
+        if (answer_file_to_be not in answer_files):
+            print("Not solved:\t\t{}".format(in_file))
+        elif not compare_two_files(out_file, answer_file_to_be):
+                print("Output error:\t\t{}".format(in_file))
+        else:
+            print("Correct: {}".format(in_file))
 
 

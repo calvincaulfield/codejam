@@ -1,10 +1,11 @@
+import sys
 
-def solve(input, output):
+def solve():
     def get_int():
-        return int(input.readline().strip())
+        return int(sys.stdin.readline().strip())
 
     def get_string():
-        return input.readline().strip()
+        return sys.stdin.readline().strip()
 
     def solve_case():
         # All time units are minute
@@ -46,5 +47,6 @@ def solve(input, output):
     num_cases = get_int()
     for i in range(num_cases):        
         x, y = solve_case()
-        output.write("Case #{}: {} {}\n".format(i + 1, x, y))
+        sys.stdout.write("Case #{}: {} {}\n".format(i + 1, x, y))
 
+solve()

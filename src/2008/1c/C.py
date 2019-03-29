@@ -1,10 +1,12 @@
-def solve(input, output):
+import sys
+
+def solve():
 
     def get_int():
-        return int(input.readline().strip())
+        return int(sys.stdin.readline().strip())
 
     def get_ints():
-        return [int(x) for x in input.readline().strip().split(" ")]
+        return [int(x) for x in sys.stdin.readline().strip().split(" ")]
 
     def solve_case():
         n, m, X, Y, Z = get_ints()
@@ -48,5 +50,6 @@ def solve(input, output):
 
     num_cases = get_int()
     for i in range(num_cases):        
-        output.write("Case #{}: {}\n".format(i + 1, solve_case()))
+        sys.stdout.write("Case #{}: {}\n".format(i + 1, solve_case()))
 
+#solve()
